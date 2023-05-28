@@ -1,3 +1,136 @@
+let carrito = [];
+let compra_articulo;
+
+class Producto {
+
+    constructor(id, nombre, precio, stock, unidades_vendidas){
+        this.id = id;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.unidades_vendidas = unidades_vendidas;
+    }
+
+    obtener_datos(){
+        console.log("Id: ", this.id);
+        console.log("Nombre: ", this.nombre);
+        console.log("Precio: $", this.precio);
+        console.log("Stock: ", this.stock);
+        console.log("Unidades Vendidas: ", this.unidades_vendidas);
+        console.log("------------------------");
+    }
+
+    obtener_stock(){
+
+        if(this.stock<=0){
+
+            return false;
+        }else {
+            return true;
+        }
+
+    }
+
+    venta_stock(cantidad){
+        if(this.stock >= cantidad){
+            this.stock = this.stock - cantidad;
+            this.unidades_vendidas = this.unidades_vendidas + cantidad;
+            return true;
+        }else {
+
+            return false;
+        }
+
+    }
+}
+
+let lista_productos = [];
+
+lista_productos.push(new Producto(1, "Tennis Adidas", 200, 3, 0));
+lista_productos.push(new Producto(2, "Tennis Nike", 100, 4, 0));
+lista_productos.push(new Producto(3, "Tennis New Balance", 150, 1, 0));
+lista_productos.push(new Producto(4, "Tennis Vans", 250, 4, 0));
+lista_productos.push(new Producto(5, "Tennis Reebok", 400, 2, 0));
+lista_productos.push(new Producto(6, "Tennis Fila", 120, 5, 0));
+lista_productos.push(new Producto(7, "Tennis Ocean Pacific", 220, 0, 0));
+lista_productos.push(new Producto(8, "Tennis Under Armour", 330, 8, 0));
+
+
+console.log("Lista De Productos : ");
+console.log("", lista_productos);
+console.log(" ");
+
+for(let producto of lista_productos){
+    producto.obtener_datos();
+}
+
+//¿existe el artículo que digitó el cliente?
+function buscar_articulo(articulo){
+
+    return articulo.id == compra_articulo;
+}
+
+//Agregar IVA
+ function iva(producto){
+    let iva = producto.precio * 0.19;
+
+    return {
+        nombre : producto.nombre,
+        precio : producto.precio +iva,
+        unidades : producto.unidades_vendidas
+    }
+ }
+
+
+
+// Capturando las compras del usuario
+
+compra_articulo = parseFloat(prompt("Para comprar, ingrese el número que identifica al artículo : - 0. Para finalizar la compra - 1. Tennis Adidas $200 - 2. Tennis Nike $100 - 3. Tennis NewBalance $150 - 4. Tennis Vans $250 - 5. Tennis Reebok $400 - 6. Tennis Fila $120 - 7. Tennis Ocean Pacific $220 - 8. Tennis Under Armour $330"));
+
+
+while (compra_articulo != 0){
+
+
+    resultado_busqueda = lista_productos.find(buscar_articulo);
+
+    if(resultado_busqueda == undefined){
+        alert("Producto no encontrado");
+        compra_articulo = parseFloat(prompt("Para comprar, ingrese el número que identifica al artículo : - 0. Para finalizar la compra - 1. Tennis Adidas $200 - 2. Tennis Nike $100 - 3. Tennis NewBalance $150 - 4. Tennis Vans $250 - 5. Tennis Reebok $400 - 6. Tennis Fila $120 - 7. Tennis Ocean Pacific $220 - 8. Tennis Under Armour $330"));
+
+    } else if(resultado_busqueda.obtener_stock()){   
+        
+        let unidades = parseInt(prompt (" Ingrese el número de unidades que requiere de este producto"));
+        if(resultado_busqueda.venta_stock(unidades)){
+            carrito.push(resultado_busqueda); 
+        } else{
+            alert("Lo sentimos, no tenemos stock disponible, unidades : " + resultado_busqueda.stock);
+        }
+            
+
+        compra_articulo = parseFloat(prompt("Para comprar, ingrese el número que identifica al artículo : - 0. Para finalizar la compra - 1. Tennis Adidas $200 - 2. Tennis Nike $100 - 3. Tennis NewBalance $150 - 4. Tennis Vans $250 - 5. Tennis Reebok $400 - 6. Tennis Fila $120 - 7. Tennis Ocean Pacific $220 - 8. Tennis Under Armour $330"));
+    } else{
+        alert("¡ Lo sentimos, no tenemos stock del producto !, unidades :" + resultado_busqueda.stock);
+        compra_articulo = parseFloat(prompt("Para comprar, ingrese el número que identifica al artículo : - 0. Para finalizar la compra - 1. Tennis Adidas $200 - 2. Tennis Nike $100 - 3. Tennis NewBalance $150 - 4. Tennis Vans $250 - 5. Tennis Reebok $400 - 6. Tennis Fila $120 - 7. Tennis Ocean Pacific $220 - 8. Tennis Under Armour $330"));
+    }
+
+    
+}
+
+console.log("El Carrito de Compras : ", carrito);
+
+
+
+
+// Fin del carrito de compras
+
+// Sumandole el IVA a los productos comprados por el usuario
+
+let map_iva = carrito.map(iva);
+console.log("MAP", map_iva);
+
+
+
+/*
 let total = 0;
 let descuentoUno = 10;
 let descuentoDos = 15;
@@ -233,3 +366,4 @@ total = CostoEnvio(total);
 pagoCuotas(debitoCredito);
 articulosComprados();
 resumenCompra();
+*/
